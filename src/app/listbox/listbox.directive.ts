@@ -7,7 +7,7 @@ import {
   Output,
   QueryList,
   ViewChildren,
-  AfterViewInit
+  AfterViewInit, HostListener
 } from '@angular/core';
 import {ListboxOptionDirective} from "./listbox-option.directive";
 import {ListKeyManager} from "@angular/cdk/a11y";
@@ -25,6 +25,11 @@ export class ListboxDirective {
   @Input() selectedOption: ListboxOptionDirective;
   @Input() selectedIndex: number;
 
+  @HostListener('mouseenter') onMouseEnter() {
+    console.log('in mouse enter');
+    this.el.nativeElement.style.backgroundColor = 'yellow';
+  }
+
   private _listKeyManager: ListKeyManager<ListboxOptionDirective>;
 
   ngAfterViewInit() {
@@ -32,7 +37,7 @@ export class ListboxDirective {
                                .withWrap().withVerticalOrientation(true);
   }
 
-  onSelectedOptionChange(option: ListboxOptionDirective) {
+  updateSelectedOption(option: ListboxOptionDirective) {
     this.selectedOption = this.selectedOption === option ? undefined : option;
     this.selectedIndex = this.selectedOption === option ? -1 : this._options.toArray().indexOf(option);
   }

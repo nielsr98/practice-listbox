@@ -6,12 +6,14 @@ import { AppComponent } from './app.component';
 import { ListboxDirective } from './listbox/listbox.directive';
 import { ListboxOptionDirective } from './listbox/listbox-option.directive';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ExampleListboxComponent } from './example-listbox/example-listbox.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ListboxDirective,
-    ListboxOptionDirective
+    ListboxOptionDirective,
+    ExampleListboxComponent
   ],
   imports: [
     BrowserModule,
