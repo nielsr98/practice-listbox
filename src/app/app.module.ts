@@ -3,10 +3,14 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ListboxDirective } from './listbox/listbox.directive';
+import { ListboxOptionDirective } from './listbox/listbox-option.directive';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ListboxDirective,
+    ListboxOptionDirective
   ],
   imports: [
     BrowserModule,
