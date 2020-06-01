@@ -52,8 +52,18 @@ export class ListboxDirective {
   }
 
   updateSelectedOption(option: ListboxOptionDirective) {
-    this.selectedOption = this.selectedOption === option ? undefined : option;
-    this.selectedIndex = this.selectedOption === option ? -1 : this._options.toArray().indexOf(option);
+    if (this.selectedOption === option) {
+      this.highlight(option, null);
+      this.selectedOption = undefined;
+      this.selectedIndex = -1;
+    } else {
+      if (this.selectedOption) {
+        this.highlight(this.selectedOption, null);
+      }
+      this.highlight(option, 'lightblue');
+      this.selectedOption = option;
+      this.selectedIndex = this._options.toArray().indexOf(option);
+    }
   }
 
   focus(): void {
@@ -64,8 +74,8 @@ export class ListboxDirective {
     this.el.nativeElement.blur();
   }
 
-  highlight(color: string): void {
-    this.el.nativeElement.style.backgroundColor = color;
+  highlight(option: ListboxOptionDirective, color: string): void {
+    option.getNativeElement().nativeElement.style.backgroundColor = color;
   }
 
   getItems(): ListboxOptionDirective[] {
