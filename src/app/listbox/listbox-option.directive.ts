@@ -19,18 +19,6 @@ export class ListboxOptionDirective implements ListKeyManagerOption {
 
   @Output() selectionChange = new EventEmitter<ListboxOptionDirective>();
 
-  @HostListener('click') onClick() {
-    console.log('in option click');
-    // this.selected = !this.selected;
-    // console.log(this.selected);
-    // this.selectionChange.emit(this);
-    // if (this.selected) {
-    //   this.updateBackground('lightblue');
-    // } else {
-    //   this.updateBackground(null);
-    // }
-  }
-
   private disable?: boolean;
 
   getLabel?(): string {
