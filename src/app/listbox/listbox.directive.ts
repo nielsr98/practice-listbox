@@ -1,16 +1,30 @@
-import {ContentChildren, Directive, ElementRef, EventEmitter, Input, Output, QueryList} from '@angular/core';
+import {
+  ContentChildren,
+  Directive,
+  ElementRef,
+  EventEmitter,
+  Input,
+  Output,
+  QueryList,
+  ViewChildren
+} from '@angular/core';
 import {ListboxOptionDirective} from "./listbox-option.directive";
+import {ListKeyManager} from "@angular/cdk/a11y";
 
 @Directive({
-  selector: '[appListbox]'
+  selector: '[appListbox]',
+  exportAs: 'cdkListbox'
 })
 export class ListboxDirective {
 
   constructor(private el: ElementRef) { }
 
-  @ContentChildren(ListboxOptionDirective, {descendants: true}) _options: QueryList<ListboxOptionDirective>;
+  @ViewChildren(ListboxOptionDirective) _options: QueryList<ListboxOptionDirective>;
 
-  @Input() selected: ListboxOptionDirective;
+  @Input() selectedOption: ListboxOptionDirective;
   @Input() selectedIndex: number;
+
+  private _listKeyManager: ListKeyManager<ListboxOptionDirective>;
+
 
 }
