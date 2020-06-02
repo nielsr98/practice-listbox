@@ -21,21 +21,26 @@ export class ListboxDirective {
   constructor(private el: ElementRef) { }
 
   @ContentChildren(ListboxOptionDirective) _options: QueryList<ListboxOptionDirective>;
-  optionsNativeElements = [];
+  private optionsNativeElements = [];
+  private _uniqueIdCounter = 0;
+  private _listKeyManager: ListKeyManager<ListboxOptionDirective>;
 
   @Input() selectedOption: ListboxOptionDirective;
   @Input() selectedIndex: number;
 
   @HostListener('click', ['$event']) onClickUpdateSelectedOption($event) {
-    const selectedOptionIndex = this.optionsNativeElements.indexOf($event.target);
-    const selectedOption = this._options.toArray()[selectedOptionIndex];
+    let selectedOption: ListboxOptionDirective;
+    this._options.toArray().forEach(option => {
+      if (option.id === $event.target.id) {
+        selectedOption = option;
+      }
+    });
     this.updateSelectedOption(selectedOption);
   }
 
-  private _listKeyManager: ListKeyManager<ListboxOptionDirective>;
-
   ngAfterViewInit() {
     this._options.forEach(option => {
+      option.setOptionId(`cdk-option-${this._uniqueIdCounter++}`);
       this.optionsNativeElements.push(option.getNativeElement().nativeElement);
     });
 

@@ -1,4 +1,4 @@
-import {Directive, ElementRef, EventEmitter, HostListener, Input, Output} from '@angular/core';
+import {Directive, ElementRef, EventEmitter, HostBinding, HostListener, Input, Output} from '@angular/core';
 import {ListKeyManagerOption} from '@angular/cdk/a11y/';
 
 @Directive({
@@ -17,7 +17,7 @@ export class ListboxOptionDirective implements ListKeyManagerOption {
 
   @Input() label: string;
 
-  @Output() selectionChange = new EventEmitter<ListboxOptionDirective>();
+  @HostBinding('attr.id') id: string;
 
   private disable?: boolean;
 
@@ -27,6 +27,10 @@ export class ListboxOptionDirective implements ListKeyManagerOption {
 
   getNativeElement(): ElementRef {
     return this.el;
+  }
+
+  setOptionId(optionId: string) {
+    this.id = optionId;
   }
 
   private updateBackground(color: string) {
