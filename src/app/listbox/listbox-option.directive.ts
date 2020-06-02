@@ -3,7 +3,11 @@ import {ListKeyManagerOption} from '@angular/cdk/a11y/';
 
 @Directive({
   selector: '[appListboxOption]',
-  exportAs: 'cdkListboxOption'
+  exportAs: 'cdkListboxOption',
+  host: {
+    role: 'option',
+    tabindex: '0'
+  }
 })
 export class ListboxOptionDirective implements ListKeyManagerOption {
 
@@ -18,8 +22,10 @@ export class ListboxOptionDirective implements ListKeyManagerOption {
   @Input() label: string;
 
   @HostBinding('attr.id') id: string;
+  // @HostBinding('attr.aria-role') role = 'option';
+  // @HostBinding('attr.tabindex') tabindex = 0;
 
-  private disable?: boolean;
+  public disabled = false;
 
   getLabel?(): string {
     return this.label;

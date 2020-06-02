@@ -7,14 +7,20 @@ import {
   Output,
   QueryList,
   ViewChildren,
-  AfterViewInit, HostListener
+  AfterViewInit, HostListener, HostBinding
 } from '@angular/core';
 import {ListboxOptionDirective} from "./listbox-option.directive";
 import {ListKeyManager} from "@angular/cdk/a11y";
 
+let _uniqueIdCounter = 0;
+
 @Directive({
   selector: '[appListbox]',
-  exportAs: 'cdkListbox'
+  exportAs: 'cdkListbox',
+  host: {
+    role: 'listbox',
+    tabindex: '0'
+  }
 })
 export class ListboxDirective {
 
@@ -22,13 +28,17 @@ export class ListboxDirective {
 
   @ContentChildren(ListboxOptionDirective) _options: QueryList<ListboxOptionDirective>;
   private optionsNativeElements = [];
-  private _uniqueIdCounter = 0;
+
   private _listKeyManager: ListKeyManager<ListboxOptionDirective>;
 
   @Input() selectedOption: ListboxOptionDirective;
   @Input() selectedIndex: number;
 
+  // @HostBinding('attr.aria-role') role = 'listbox';
+  // @HostBinding('attr.tabindex') tabindex = 0;
+
   @HostListener('click', ['$event']) onClickUpdateSelectedOption($event) {
+    console.log($event);
     let selectedOption: ListboxOptionDirective;
     this._options.toArray().forEach(option => {
       if (option.id === $event.target.id) {
@@ -40,7 +50,7 @@ export class ListboxDirective {
 
   ngAfterViewInit() {
     this._options.forEach(option => {
-      option.setOptionId(`cdk-option-${this._uniqueIdCounter++}`);
+      option.setOptionId(`cdk-option-${_uniqueIdCounter++}`);
       this.optionsNativeElements.push(option.getNativeElement().nativeElement);
     });
 
@@ -59,6 +69,7 @@ export class ListboxDirective {
   updateSelectedOption(option: ListboxOptionDirective) {
     if (this.selectedOption === option) {
       this.highlight(option, null);
+      this.selectedOption.selected = false;
       this.selectedOption = undefined;
       this.selectedIndex = -1;
     } else {
@@ -67,6 +78,7 @@ export class ListboxDirective {
       }
       this.highlight(option, 'lightblue');
       this.selectedOption = option;
+      this.selectedOption.selected = true;
       this.selectedIndex = this._options.toArray().indexOf(option);
     }
   }
