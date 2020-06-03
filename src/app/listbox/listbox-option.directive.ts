@@ -6,7 +6,8 @@ import {ListKeyManagerOption} from '@angular/cdk/a11y/';
   exportAs: 'cdkListboxOption',
   host: {
     role: 'option',
-    tabindex: '0'
+    '[attr.aria-selected]': 'selected',
+    '[attr.aria-disabled]': 'disabled'
   }
 })
 export class ListboxOptionDirective implements ListKeyManagerOption {
@@ -17,7 +18,7 @@ export class ListboxOptionDirective implements ListKeyManagerOption {
 
   @Input('aria-labelledby') ariaLabelledBy: string;
 
-  @Input() selected: boolean;
+  @Input() selected: boolean = false;
 
   @Input() label: string;
 
