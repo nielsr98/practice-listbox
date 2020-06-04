@@ -19,6 +19,7 @@ let _uniqueIdCounter = 0;
   exportAs: 'cdkListbox',
   host: {
     role: 'listbox',
+    '[attr.disabled]': '_disabled',
     '[attr.aria-disabled]': '_disabled',
     '[attr.aria-multiselectable]': '_multiSelectable',
     tabindex: '0'
@@ -46,11 +47,13 @@ export class ListboxDirective {
     console.log($event);
     let selectedOption: ListboxOptionDirective;
     this._options.toArray().forEach(option => {
-      if (option.id === $event.target.id) {
+      if (option.getOptionId() === $event.target.id) {
         selectedOption = option;
       }
     });
-    this.updateSelectedOption(selectedOption);
+    if (!selectedOption.disabled) {
+      this.updateSelectedOption(selectedOption);
+    }
   }
 
   get tabIndex(): number {
@@ -105,43 +108,6 @@ export class ListboxDirective {
 
   updateSelectedOption(option: ListboxOptionDirective) {
     // TODO determine how to update focus of option on select
-    // TODO update the array and recently selected always, and only change how highlighting is done
-
-    // if (this._recentlySelected) {
-    //   if (this.selectedOptions.includes(option)) {
-    //     const indexInSelectedOption = this.selectedOptions.indexOf(option);
-    //     const indexInSelectedIndices = this.selectedIndices.indexOf(this._options.toArray().indexOf(option));
-    //     this.selectedOptions.splice(indexInSelectedOption, 1);
-    //     this.selectedIndices.splice(indexInSelectedIndices, 1);
-    //     this._recentlySelected = null;
-    //     this.selectedIndex = null;
-    //     this.deselectOption(option);
-    //   } else {
-    //     this._recentlySelected = option;
-    //     this.selectedOptions.push(option);
-    //     this.selectedIndices.push(this._options.toArray().indexOf(option));
-    //     this.selectedIndex = this._options.toArray().indexOf(option);
-    //
-    //     if (this.multiSelectable) {
-    //       this.selectOption(option);
-    //     }
-    //
-    //   }
-    // } else {
-    //   if (this.selectedOptions.includes(option)) {
-    //     const indexInSelectedOption = this.selectedOptions.indexOf(option);
-    //     const indexInSelectedIndices = this.selectedIndices.indexOf(this._options.toArray().indexOf(option));
-    //     this.selectedOptions.splice(indexInSelectedOption, 1);
-    //     this.selectedIndices.splice(indexInSelectedIndices, 1);
-    //     this.deselectOption(option);
-    //   } else {
-    //     this._recentlySelected = option;
-    //     this.selectedOptions.push(option);
-    //     this.selectedIndices.push(this._options.toArray().indexOf(option));
-    //     this.selectedIndex = this._options.toArray().indexOf(option);
-    //     this.selectOption(option);
-    //   }
-    // }
 
     if (this._multiSelectable) {
       if (this.selectedOptions.includes(option)) {
@@ -191,12 +157,13 @@ export class ListboxDirective {
     if (this._multiSelectable) {
       this.selectedOptions = this._options.toArray();
       this.selectedIndices = [];
-      for (let i = 0; i < this._options.length; i++) {
-        this.selectedIndices.push(i);
-      }
 
       this._options.forEach(option => {
-        this.selectOption(option);
+        if (!option.disabled) {
+          this.selectedIndices.push(this._options.toArray().indexOf(option));
+          this.selectedOptions.push(option);
+          this.selectOption(option);
+        }
       });
     }
   }
@@ -214,6 +181,19 @@ export class ListboxDirective {
     }
   }
 
+  setDisabledListbox(isDisabled: boolean): void {
+    this._disabled = isDisabled;
+    console.log(this.el);
+  }
+
+  setDisabledOption(optionIsDisabled: boolean, optionIndex: number): void {
+    const option = this._options.toArray()[optionIndex];
+    option.disabled = optionIsDisabled;
+    option.getNativeElement().nativeElement.disabled = optionIsDisabled;
+    this.greyOutOption(option);
+    this.deselectOption(option);
+  }
+
   focusOption(option: ListboxOptionDirective): void {
     option.getNativeElement().nativeElement.focus();
   }
@@ -224,6 +204,10 @@ export class ListboxDirective {
 
   highlight(option: ListboxOptionDirective, color: string): void {
     option.getNativeElement().nativeElement.style.backgroundColor = color;
+  }
+
+  greyOutOption(option: ListboxOptionDirective): void {
+    option.getNativeElement().nativeElement.style.color = 'grey';
   }
 
   getItems(): ListboxOptionDirective[] {

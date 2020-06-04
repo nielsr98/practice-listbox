@@ -7,26 +7,20 @@ import {ListKeyManagerOption} from '@angular/cdk/a11y/';
   host: {
     role: 'option',
     '[attr.aria-selected]': 'selected',
-    '[attr.aria-disabled]': 'disabled'
+    '[attr.aria-disabled]': 'disabled',
+    '[attr.id]': '_id',
+    tabindex: '-1'
   }
 })
 export class ListboxOptionDirective implements ListKeyManagerOption {
 
   constructor(private el: ElementRef) { }
 
-  @Input('aria-label') ariaLabel: string;
-
-  @Input('aria-labelledby') ariaLabelledBy: string;
-
   @Input() selected: boolean = false;
-
+  @Input() disabled: boolean;
   @Input() label: string;
 
-  @HostBinding('attr.id') id: string;
-  // @HostBinding('attr.aria-role') role = 'option';
-  // @HostBinding('attr.tabindex') tabindex = 0;
-
-  public disabled = false;
+  private _id: string;
 
   getLabel?(): string {
     return this.label;
@@ -37,7 +31,11 @@ export class ListboxOptionDirective implements ListKeyManagerOption {
   }
 
   setOptionId(optionId: string) {
-    this.id = optionId;
+    this._id = optionId;
+  }
+
+  getOptionId(): string {
+    return this._id;
   }
 
   private updateBackground(color: string) {
