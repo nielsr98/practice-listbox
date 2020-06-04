@@ -22,6 +22,7 @@ let _uniqueIdCounter = 0;
     '[attr.disabled]': '_disabled',
     '[attr.aria-disabled]': '_disabled',
     '[attr.aria-multiselectable]': '_multiSelectable',
+    '[attr.aria-activedescendant]': '_activeDescendant',
     tabindex: '0'
   }
 })
@@ -37,11 +38,10 @@ export class ListboxDirective {
   private _listKeyManager: ListKeyManager<ListboxOptionDirective>;
   private selectedOptions: ListboxOptionDirective[] = [];
   private selectedIndices: number[] = [];
+  private selectedIndex: number;
+  private _activeDescendant: ListboxOptionDirective;
 
   @ContentChildren(ListboxOptionDirective) _options: QueryList<ListboxOptionDirective>;
-
-  @Input() recentlySelectedOption: ListboxOptionDirective;
-  @Input() selectedIndex: number;
 
   @HostListener('click', ['$event']) onClickUpdateSelectedOption($event) {
     console.log($event);
@@ -56,8 +56,13 @@ export class ListboxDirective {
     }
   }
 
-  get tabIndex(): number {
-    return this.el.nativeElement.tabIndex;
+  @Input()
+  get activeDescendant(): ListboxOptionDirective {
+    return this._activeDescendant;
+  }
+
+  set activeDescendant(descendant: ListboxOptionDirective) {
+    this._activeDescendant = descendant;
   }
 
   @Input()
@@ -183,6 +188,13 @@ export class ListboxDirective {
 
   setDisabledListbox(isDisabled: boolean): void {
     this._disabled = isDisabled;
+    this.el.nativeElement.disabled = true;
+    this._options.forEach(option => {
+      option.disabled = true;
+      option.getNativeElement().nativeElement.disabled = true;
+      this.greyOutOption(option);
+      this.deselectOption(option);
+    });
     console.log(this.el);
   }
 

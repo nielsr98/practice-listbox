@@ -19,8 +19,7 @@ export class ListboxOptionDirective implements ListKeyManagerOption {
   @Input() selected: boolean = false;
   @Input() disabled: boolean;
   @Input() label: string;
-
-  private _id: string;
+  @Input() _id: string;
 
   getLabel?(): string {
     return this.label;
