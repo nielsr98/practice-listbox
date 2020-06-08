@@ -1,29 +1,65 @@
 import {Directive, ElementRef, EventEmitter, HostBinding, HostListener, Input, Output} from '@angular/core';
-import {ListKeyManagerOption} from '@angular/cdk/a11y/';
+import {Highlightable, ListKeyManagerOption} from '@angular/cdk/a11y/';
 
 @Directive({
   selector: '[appListboxOption]',
   exportAs: 'cdkListboxOption',
   host: {
     role: 'option',
-    '[attr.aria-selected]': 'selected',
-    '[attr.aria-disabled]': 'disabled',
+    '[attr.aria-selected]': '_selected',
+    '[attr.aria-disabled]': '_disabled',
     '[attr.id]': '_id',
-    tabindex: '-1'
+    '[attr.tabindex]': '_tabIndex'
   }
 })
-export class ListboxOptionDirective implements ListKeyManagerOption {
+export class ListboxOptionDirective implements ListKeyManagerOption, Highlightable {
 
   constructor(private el: ElementRef) { }
 
-  @Input() selected: boolean = false;
-  @Input() disabled: boolean;
-  @Input() label: string;
+  @Input()
+  get selected(): boolean {
+    return this._selected
+  }
+  set selected(isSelected: boolean) {
+    this._selected = isSelected;
+  }
+
   @Input() _id: string;
 
-  getLabel?(): string {
-    return this.label;
+  @Input()
+  get tabindex(): number {
+    return this._tabIndex;
   }
+
+  set tabindex(index: number) {
+    this._tabIndex = index;
+  }
+
+  @Input()
+  get disabled(): boolean {
+    return this._disabled;
+  }
+  set disabled(isDisabled: boolean) {
+    this._disabled = isDisabled;
+    if (isDisabled) {
+      this.tabindex = null;
+    } else {
+      this.tabindex = -1;
+    }
+  }
+
+  @Input()
+  get active(): boolean {
+    return this._active;
+  }
+  set active(isActive: boolean) {
+    this._active = isActive;
+  }
+
+  private _selected: boolean = null;
+  private _disabled: boolean = false;
+  private _tabIndex: number = null;
+  private _active: boolean = false;
 
   getNativeElement(): ElementRef {
     return this.el;
@@ -37,8 +73,16 @@ export class ListboxOptionDirective implements ListKeyManagerOption {
     return this._id;
   }
 
-  private updateBackground(color: string) {
-    this.el.nativeElement.style.backgroundColor = color;
+  getLabel(): string {
+    return this.el.nativeElement.textContent;
+  }
+
+  setActiveStyles(): void {
+    this._active = true;
+  }
+
+  setInactiveStyles(): void {
+    this._active = false;
   }
 
 }
