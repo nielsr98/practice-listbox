@@ -1,11 +1,11 @@
 <span>
   Example Listbox
 </span>
-<div appListbox class="example-listbox" [multiSelectable]="isMultiSelectable">
-  <div appListboxOption>Option 1</div>
-  <div appListboxOption>Option 2</div>
-  <div appListboxOption>Option 3</div>
-  <div appListboxOption>Option 4</div>
+<div appListbox class="example-listbox" [multiSelectable]="isMultiSelectable" [useActiveDescendant]="true">
+  <div appListboxOption>a Option 1</div>
+  <div appListboxOption>b Option 2</div>
+  <div appListboxOption>c Option 3</div>
+  <div appListboxOption>d Option 4</div>
 </div>
 
 <button (click)="isMultiSelectable = !isMultiSelectable">
@@ -17,7 +17,7 @@
 <button (click)="listbox.deselectAllOptions()">
   Deselect All
 </button>
-<br>
+<br><br>
 <button (click)="listbox.setDisabledListbox(true)">
   Disable listbox
 </button>
