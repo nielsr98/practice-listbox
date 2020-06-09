@@ -140,6 +140,8 @@ export class ListboxDirective {
   }
 
   _keydown(event: KeyboardEvent): void {
+    // TODO check for modifier keys
+
     const keycode = event.keyCode;
 
     switch (keycode) {

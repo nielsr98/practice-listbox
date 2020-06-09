@@ -8,6 +8,7 @@ import { ListboxOptionDirective } from './listbox/listbox-option.directive';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ExampleListboxComponent } from './example-listbox/example-listbox.component';
 import { HighlightDirective } from './listbox/highlight.directive';
+import {ReactiveFormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -20,7 +21,8 @@ import { HighlightDirective } from './listbox/highlight.directive';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
