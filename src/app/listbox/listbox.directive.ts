@@ -10,9 +10,9 @@ import {
   AfterViewInit, HostListener, HostBinding
 } from '@angular/core';
 import {ListboxOptionDirective} from "./listbox-option.directive";
-import {ListKeyManager, ActiveDescendantKeyManager} from "@angular/cdk/a11y";
 import {ENTER, SPACE} from "@angular/cdk/keycodes";
 import {Observable} from "rxjs";
+import {ActiveDescendantKeyManager} from "@angular/cdk/a11y";
 
 let _uniqueIdCounter = 0;
 
@@ -141,7 +141,6 @@ export class ListboxDirective {
 
   _keydown(event: KeyboardEvent): void {
     // TODO check for modifier keys
-
     const keycode = event.keyCode;
 
     switch (keycode) {

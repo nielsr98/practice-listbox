@@ -8,7 +8,7 @@
   <div appListboxOption>d Option 4</div>
 </div>
 
-<button (click)="isMultiSelectable = !isMultiSelectable">
+<button (click)="toggleMultiSelectable()">
   {{isMultiSelectable ? 'Disable multiSelectable' : 'Enable multiSelectable'}}
 </button>
 <button (click)="listbox.selectAllOptions()">

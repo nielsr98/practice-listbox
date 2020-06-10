@@ -10,11 +10,15 @@ import { ListboxOptionDirective} from "../listbox/listbox-option.directive";
 })
 export class ExampleListboxComponent implements OnInit {
 
-  private isMultiSelectable = false;
-  @ViewChild(ListboxDirective, {static: false}) listbox: ListboxDirective;
+  isMultiSelectable = false;
+  @ViewChild(ListboxDirective) listbox: ListboxDirective;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  toggleMultiSelectable() {
+    this.isMultiSelectable = !this.isMultiSelectable;
   }
 }
